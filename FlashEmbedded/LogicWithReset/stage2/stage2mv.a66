@@ -1,0 +1,208 @@
+;*************************************************************************
+;.b
+;  Copyright (c) 2000 DaimlerChrysler Rail Systems (North America) Inc
+;*************************************************************************
+;  Project    : C167 FLASH Programming
+;  File Name  : STAGE2.A66
+;  Subsystem  : Second stage boot loader
+;  Procedures : N/A
+;
+;
+;  Abstract   :
+;  Compiler   :
+;
+;  EPROM Drawing:
+;.b
+;*************************************************************************
+; History:
+;  01 May 2000 D.Smail
+;    Created
+; Revised:
+;  16 Jul 2001 D.Smail
+;    Modified stage 3 byte count to account for the addition
+;    of the INTEL bottom boot chip
+;  28 Jan 2002 D.Smail
+;    Modified for ams29040 sector erase
+;*************************************************************************
+    ; Value definitions for System Configuration Register : SYSCON/BUSCON0
+    ; 'Default' is the value after reset.
+
+    ; Flash EPROM, Battery back-up RAM and GEAbus
+    ; With External READY enabled Memory Cycle Time is extended by a number
+    ; of additional State Times in a range from 0 through 7.
+    ; - BUSCON0.3 = '0' :synchronous READY.
+    ; - BUSCON0.3 = '1' :asynchronous READY.
+    ; - BUSCON0.[2..0]  :up to 7 wait states are available (0 => 7).
+
+    __MCTC      LIT     '0Eh'; => MCTC [3..0] = 0110b = 06h 
+                             ; Ready is synchronous  (MCTC.3 = '0').
+                             ; Memory wait state is 1 (MCTC.[2..0] = '110')
+
+
+    ; The Read/Write Signal Delay is 0.5 or 0 State Times. BUSCON0.4
+    __RWDC0     LIT     '1'
+                            ; 0 = Delay Time (Default)
+                            ; 1 = No Delay Time
+
+    ; Memory Tri-state is extended by either 1 or 0 State Times. BUSCON0.5
+    __MTTC0     LIT     '0' 
+                            ; 0 = Delay Time (Default)
+                            ; 1 = No Delay Time
+
+    ; External bus configurations. BUSCON0[7..6]
+                            ; Default state is determined by the
+                            ; state of the port pins P0L.7 and P0L.6
+                            ; at reset.
+                            ; Programmed for 16-bit Demultiplexed Bus
+                    
+    ; ALE Signal is lengthened by either 1 or 0 State Times. BUSCON0.9
+    ; Do not disable the ALE lengthening option for a multiplexed bus
+    ; configuration. See problem 17 in errata sheet SAB-C167A-LM,ES-AC,1.1
+    ; on page 4/9.
+    __ALECTL0   LIT     '0'
+                            ; 1 = Delay Time (Default if pin #EA is low
+                            ; 0 = No Delay Time (Default if pin #EA is high
+    
+    ; READY# Input Enable control bit. BUSCON0.12
+    __RDYEN0    LIT     '0'     
+                            ; 0 = disabled (Default)
+                            ; 1 = enabled
+
+    ; Process BUSCON0 low byte and high byte values
+    BUSC0_L     EQU     ((__MTTC0<<5) | (__RWDC0<<4) | (__MCTC))
+    BUSC0_H     EQU     ((__RDYEN0<<4) | (__ALECTL0<<1))
+
+    ; Mask low and high byte BUSCON0
+    BUSC0_M_L   EQU     03Fh
+    BUSC0_M_H   EQU     012h
+
+    ; Write Configuration Mode Control (WR) Enable bit. SYSCON.7
+    __WRCFG     LIT     '0'
+                            ; 0 = Normal operation of WR# and BHE# (default)
+                            ; 1 = WR# acts as WRL#. BHE# acts as WRH#
+                    
+    ; System Clock Output (CLKOUT) Enable bit. SYSCON.8
+    __CLKEN     LIT     '1'      
+                            ; 0 = disabled
+                            ; 1 = enabled (Default)
+
+    ; Byte High Enable (BHE#) pin control bit. SYSCON.9
+    __BYTDIS    LIT     '0'     
+                            ; 0 = enabled (Default)
+                            ; 1 = disabled
+
+    ; Internal ROM Access Enable (Read Only). SYSCON.10
+                            ; Default state is determined by the state
+                            ; of the #EA pin at reset
+
+    ; Segmentation Disable control bit. SYSCON.11
+    __SGTDIS    LIT     '0'
+                            ; 0 = Default is segmentation enabled
+                            ; 1 = segmentation is disabled
+
+    ; ROM Segment Mapping control bit. SYSCON.12
+    __ROMS1     LIT     '0'     
+                            ; 0 = Internal ROM mapped to segm.0 (default)
+                            ; 1 = Internal ROM mapped to segm.1
+
+    ; Stack Size selection of between 32 and 512 words. SYSCON[15..13]
+    __STKSZ     LIT     '4'
+                            ; System stack sizes
+                            ; 0 = 256 words (Default)
+                            ; 1 = 128 words
+                            ; 2 =  64 words
+                            ; 3 =  32 words
+                            ; 4 = 512 words
+                            ; 7 = No wrapping
+
+    ; Process SYSCON low byte and high byte values.
+    SYSC_L      EQU (__WRCFG << 7)
+    SYSC_H      EQU ((__STKSZ << 5) | (__ROMS1 << 4) | (__SGTDIS<<3) | (__BYTDIS<<1) | __CLKEN)
+
+    ; Mask low and high byte SYSCON.
+    SYSC_M_L    EQU     080H
+    SYSC_M_H    EQU     0FBH
+
+
+
+
+NAME    STAGE2CODE
+
+    SSKDEF 04                   ; 512 words
+    REGDEF  R0-R5
+
+ASSUME  DPP3:SYSTEM         ; assume system data page pointer.
+SEC1    SECTION CODE AT 0FA60H
+MAIN    PROC    TASK    INTNO=0
+
+
+    ; Set SYSCON register.
+    BFLDL       SYSCON, #SYSC_M_L, #(SYSC_L AND SYSC_M_L)
+    BFLDH       SYSCON, #SYSC_M_H, #(SYSC_H AND SYSC_M_H)
+
+    ; Set BUSCON0 register.
+    BFLDL       BUSCON0, #BUSC0_M_L, #(BUSC0_L AND BUSC0_M_L)
+    BFLDH       BUSCON0, #BUSC0_M_H, #(BUSC0_H AND BUSC0_M_H)
+
+
+        JMPS    SEG SEC1, next_line
+
+next_line:  far
+        MOV     DPP0,#0H
+        MOV     DPP1,#1H
+        MOV     DPP2,#2H
+        MOV     DPP3,#3H
+
+        MOV     BUSCON1,#0049Eh
+        MOV     ADDRSEL1,#02008h                ; Start address = 200000h
+                                                ; Range size = 256 KByte
+
+; ****************************************************************
+; load user software via ASC0 and store it to ext. memory 200000h
+; ****************************************************************
+        MOV     R1,#0020H            ; segment
+        MOV     R5,#0000H            ; offset
+        MOV     R2,#00H
+        MOV     R4,#00H
+
+label1: JNB     S0RIC.7,label1      ; wait for byte in srx
+        MOVB    RL2,S0RBUF          ; byte received
+        EXTS    R1,#01h             ;
+        MOVB    [R5],RL2            ; move byte to External RAM
+        EXTS    R1,#01h             ; get byte just stored in External RAM
+        MOVB    RL3,[R5+]           ; and increment External RAM pointer
+        MOVB    S0TBUF,RL3          ; echo to the PC
+        BCLR    S0RIC.7             ; clear the srx port
+                                    ;
+                                    ; ***************************************
+                                    ;            Adjust Byte Count
+                                    ;
+                                    ;          ( sizeof(stage3.167) - 2)
+        CMPI1   R4,#15F5h           ; CONST =  -------------------------
+                                    ;                     2
+                                    ;
+                                    ; where sizeof(stage3.167) is the size of
+                                    ; file ..\stage3\stage3.167 in bytes
+                                    ;
+                                    ; For example if one performed a "DIR" on
+                                    ; STAGE3.167 and discovered the size was
+                                    ; 8244 bytes, then CONST would be
+                                    ; (8244 - 2) / 2 = 1019H
+                                    ;
+                                    ; ..\stage3\stage3.167 is created
+                                    ; after running FLASH.EXE.
+                                    ; ***************************************
+                                    ;
+        JMPR    CC_NZ,label1        ; determine if entire stage3.hex received
+        JMPS    STAGE3              ; start executing stage3.hex
+
+
+SEC1    ENDS
+
+SEC2    SECTION CODE    AT 0200000H
+
+STAGE3:
+
+SEC2    ENDS
+
+        END

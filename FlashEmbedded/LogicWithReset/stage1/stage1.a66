@@ -1,0 +1,58 @@
+;*************************************************************************
+;.b
+;  Copyright (c) 2000 DaimlerChrysler Rail Systems (North America) Inc
+;*************************************************************************
+;  Project    : C167 FLASH Programming
+;  File Name  : STAGE1.A66
+;  Subsystem  : First stage boot loader
+;  Procedures : N/A
+;
+;
+;  Abstract   :
+;  Compiler   :
+;
+;  EPROM Drawing:
+;.b
+;*************************************************************************
+; History:
+;  01 May 2000 D.Smail
+;    Created
+; Revised:
+;*************************************************************************
+
+NAME    STAGE1CODE
+
+    SSKDEF  04              ; 512 words
+    REGDEF  R0
+
+;*************************************************************************
+ASSUME  DPP3:SYSTEM         ; assume system data page pointer.
+SEC1    SECTION CODE    AT 0FA40H
+MAIN    PROC    TASK    INTNO=0
+; init
+        MOV     STKUN,#0FA40H
+        MOV     STKOV,#0FA20H
+
+; main
+        MOV     R0,#0FA60H
+LABEL1: JNB     S0RIC.7,LABEL1      ; Wait for byte from PC
+        MOVB    [R0],S0RBUF         ; Store received byte
+        BCLR    S0RIC.7             ; Clear the srx port receive bit
+        CMPI1   R0,#0FAB5H          ; All 85 bytes received ?
+        JMPR    CC_NZ,LABEL1        ; No, continue receiving bytes
+        JMPA    STAGE2              ; Yes, execute stage2.hex
+        RETV
+MAIN    ENDP
+SEC1    ENDS
+;*************************************************************************
+
+
+;*************************************************************************
+SEC2    SECTION CODE    AT 0FA60H
+
+STAGE2:
+
+SEC2    ENDS
+;*************************************************************************
+
+        END

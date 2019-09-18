@@ -1,0 +1,10 @@
+;locate file for bsl monitor code used for burning flash eproms
+novectab
+memory (rom(200000H to 207fffH))
+re(me(00h to 0efffh))
+re(me(0f200h to 0f5ffh))
+re(me(010000h to 01fffffH))
+re(me(210000h to 0ffffffH))
+symbolcolumns(1)
+pagewidth(80)
+stage3.lno TO stage3.out case 

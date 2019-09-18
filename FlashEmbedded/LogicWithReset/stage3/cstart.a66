@@ -1,0 +1,66 @@
+;**************************************************************************
+;.b
+;  Copyright (c) 2000 DaimlerChrysler Rail Systems (North America) Inc
+;*************************************************************************
+;  Project    : C167 FLASH Programming
+;  File Name  : CSTART.A66
+;  Subsystem  : Third stage boot loader
+;  Procedures : N/A
+;
+;
+;  Abstract   :
+;  Compiler   :
+;
+;  EPROM Drawing:
+;.b
+;****************************************************************************
+; History:
+;  01 Apr 2000 D.Smail
+;    Created
+; Revised:
+;*************************************************************************/
+
+
+$EXTEND                     ; enable all 80167 extensions
+$NOMOD166                   ; disable the internal set of 80166 SFRs
+$STDNAMES(reg167b.def)      ; load set of 80167 SFRs from reg167b.def
+
+$MODEL(large)               ; set assembler controls.
+$SEGMENTED
+$CASE
+$GENONLY
+$DEBUG
+$NOLOCALS
+
+
+NAME    STARTUP_CODE
+
+  EXTERN  _main:FAR       ; start label user program.
+  SSKDEF  04              ; 512 words
+  REGDEF  R0-R15
+
+__CSTART_PR SECTION CODE WORD PUBLIC 'CPROGRAM'
+__CSTART    PROC TASK __CSTART_TASK INTNO __CSTART_INUM = 00H
+
+  MOV     CP,#0FC00H
+  MOV     SP,#0FC00H
+  MOV     STKUN,#0FC00H
+  MOV     STKOV,#0FA00H
+
+  MOV         DPP1, #PAG ?USRSTACK_TOP        ; set DPP1 to page of user stack
+  NOP                                         ; delay for pipeline effect
+  NOP                                         ; delay for pipeline effect
+
+  MOV         R0, #POF ?USRSTACK_TOP          ; set user stack pointer in R0
+                                              ; permits "C" function calls
+  BSET        R0.0EH                          ; User stack uses DPP1
+
+
+  CALL            _main                       ;call main()
+  RETV
+
+__CSTART    ENDP
+__CSTART_PR ENDS
+  END
+
+

@@ -1,0 +1,156 @@
+#---------------------------------------------------------------------------
+#  Make File
+#
+#  System  :
+#
+#---------------------------------------------------------------------------
+#
+# Any flags to be used in the compilation of all C programs should
+# be listed here.  (Separate each by a space)
+#
+#---------------------------------------------------------------------------
+
+# Application Flags
+#============================
+CFLAGS = 
+!if $d(S0)
+CFLAGS = -DINITS0
+!endif
+
+
+# C166 80c166 directory
+#======================
+C166=x:
+
+# C166 compiler executable path
+#==============================
+CMPL=$(C166)\bin\c166.exe
+
+# A166 assembler executable path
+#===============================
+ASSM=$(C166)\BIN\A166.exe
+
+# Macro Preprocessor executable path
+#===================================
+MAC= $(C166)\bin\m166.exe
+
+# A166 formatter
+#===============
+FORM1=$(C166)\bin\ihex166.exe 
+FORM2=$(C166)\bin\srec166.exe 
+
+# Deletes capability
+#===================
+RM=del
+
+# A166 and C166 linker executable path
+#============================
+LINK=$(C166)\bin\l166.exe
+
+
+#=====================
+# default .c.obj rules
+#=====================
+.c.obj :
+    $(CMPL) $(COPT) $(CFLAGS) $(MEMTYPE) $*.c
+    $(ASSM) $*.src
+    $(RM) $*.src
+
+#=======================
+# default .asm.obj rules
+#=======================
+.a66.obj:
+    $(MAC)  $*.a66 DEFINE( MODEL, LARGE )
+    $(ASSM)  $*.src $(AOPT)
+    $(RM) $*.src
+
+
+#**********************************************************************
+#                       COMPILER OPTIONS
+#======================================================================
+# -OfOP    Remove any kind of optimization (speed over code density)
+# -O       keep all types of optimization  (code density over speed)
+# -s       Merge C source code with assembly output
+# -Ms      Compile at small model
+# -Ml      Compile at large model
+# -T0      Used to prevent any global non-initialized data to 'CNEAR' section
+#          large and medium models only
+# -I\c16651r0\include       Include the C166 include directory
+# -g       Enable symbolic debug information
+# -t       Display module summary and write section information
+#                                                in output file
+# -I..\kernel    Include the kernel directory
+# -I..\demo      Include the demo directory
+# -x       167 options
+# -err     Error file
+#========================================================================
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+# NOTE: RTXC has not yet been designed to run in TINY  or  MEDIUM models
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+#========================================================================
+#   Compiler Options
+#========================================================================
+#   C166 compiler options
+#------------------------------------------------------------------------
+COPT = -OfOP -s -T0 -Ml -IX:\include -g -x -err
+#------------------------------------------------------------------------
+# A166  assembler options  (SEGMENTED)
+#-------------------------------------
+AOPT = sg DEBUG SYMB EXTEND
+#---------------------------
+# LINK in libraries for selected libraries
+#-----------------------------------------
+LIBS=x:\lib\ext\c166l.lib
+#**********************************************************************
+
+
+#
+# The following lines specify the path and name of the tools.
+#
+#
+#----------------------------------------------------------------------
+# Dependencies are given below.
+#
+#
+
+main.obj        : main.c    include.h
+crc.obj         : crc.c     include.h
+blkdata.obj     : blkdata.c include.h
+serial.obj      : serial.c  include.h
+flash.obj       : flash.c   flash.h
+
+
+#-----------------------------------------------------------------------
+# This is a list of all the files that must be updated to generate a new
+# executable.
+#
+
+
+OBJECTS = cstart.obj   \
+          main.obj     \
+          serial.obj   \
+          blkdata.obj  \
+          crc.obj      \
+          flash.obj    \
+
+LINKALL = $(LINK) @c167.lnk $(LIBS) TO stage3.lno case print(stage3.mp1)
+LOCALL  = $(LINK) LOCATE lsy @c167.loc NOCC print(stage3.mp2)
+
+
+
+
+#---------------------------------------------------------------------------
+# Give the command line for the binder and builder here.  You must
+# use "control files" if the total command line is over
+# 128 characters (this is a DOS limit).
+#
+
+stage3: $(OBJECTS)
+        $(LINKALL)
+        $(LOCALL)
+        $(FORM1) stage3.out stage3.hex
+        copy stage3.hex v:
+
+cleanup:
+    del *.obj
+    del *.lst

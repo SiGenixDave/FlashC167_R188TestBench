@@ -1,0 +1,93 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logic", "Logic", "{F2883626-1796-43D3-A28C-2DBAD215E9F5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stage1", "Stage1", "{37C7B19C-1E06-49EA-BDB0-20BA0813D140}"
+	ProjectSection(SolutionItems) = preProject
+		FlashEmbedded\LogicWithReset\stage1\MAKE.EXE = FlashEmbedded\LogicWithReset\stage1\MAKE.EXE
+		FlashEmbedded\LogicWithReset\stage1\MAKEFILE = FlashEmbedded\LogicWithReset\stage1\MAKEFILE
+		FlashEmbedded\LogicWithReset\stage1\stage1.a66 = FlashEmbedded\LogicWithReset\stage1\stage1.a66
+		FlashEmbedded\LogicWithReset\stage1\STAGE1.HEX = FlashEmbedded\LogicWithReset\stage1\STAGE1.HEX
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stage2", "Stage2", "{BAE2F377-A496-41E3-A72C-7EF7964AD349}"
+	ProjectSection(SolutionItems) = preProject
+		FlashEmbedded\LogicWithReset\stage2\MAKE.EXE = FlashEmbedded\LogicWithReset\stage2\MAKE.EXE
+		FlashEmbedded\LogicWithReset\stage2\MAKEFILE = FlashEmbedded\LogicWithReset\stage2\MAKEFILE
+		FlashEmbedded\LogicWithReset\stage2\STAGE2.A66 = FlashEmbedded\LogicWithReset\stage2\STAGE2.A66
+		FlashEmbedded\LogicWithReset\stage2\STAGE2.HEX = FlashEmbedded\LogicWithReset\stage2\STAGE2.HEX
+		FlashEmbedded\LogicWithReset\stage2\STAGE2IP.A66 = FlashEmbedded\LogicWithReset\stage2\STAGE2IP.A66
+		FlashEmbedded\LogicWithReset\stage2\STAGE2IP.HEX = FlashEmbedded\LogicWithReset\stage2\STAGE2IP.HEX
+		FlashEmbedded\LogicWithReset\stage2\stage2mv.a66 = FlashEmbedded\LogicWithReset\stage2\stage2mv.a66
+		FlashEmbedded\LogicWithReset\stage2\STAGE2MV.HEX = FlashEmbedded\LogicWithReset\stage2\STAGE2MV.HEX
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stage3", "Stage3", "{AE6487A8-BD57-438B-BB0C-A965A59971EA}"
+	ProjectSection(SolutionItems) = preProject
+		FlashEmbedded\LogicWithReset\stage3\blkdata.c = FlashEmbedded\LogicWithReset\stage3\blkdata.c
+		FlashEmbedded\LogicWithReset\stage3\c167.lnk = FlashEmbedded\LogicWithReset\stage3\c167.lnk
+		FlashEmbedded\LogicWithReset\stage3\C167.LOC = FlashEmbedded\LogicWithReset\stage3\C167.LOC
+		FlashEmbedded\LogicWithReset\stage3\CPU_DEP.H = FlashEmbedded\LogicWithReset\stage3\CPU_DEP.H
+		FlashEmbedded\LogicWithReset\stage3\CRC.C = FlashEmbedded\LogicWithReset\stage3\CRC.C
+		FlashEmbedded\LogicWithReset\stage3\cstart.a66 = FlashEmbedded\LogicWithReset\stage3\cstart.a66
+		FlashEmbedded\LogicWithReset\stage3\FLASH.C = FlashEmbedded\LogicWithReset\stage3\FLASH.C
+		FlashEmbedded\LogicWithReset\stage3\FLASH.H = FlashEmbedded\LogicWithReset\stage3\FLASH.H
+		FlashEmbedded\LogicWithReset\stage3\include.h = FlashEmbedded\LogicWithReset\stage3\include.h
+		FlashEmbedded\LogicWithReset\stage3\MAIN.C = FlashEmbedded\LogicWithReset\stage3\MAIN.C
+		FlashEmbedded\LogicWithReset\stage3\MAKE.EXE = FlashEmbedded\LogicWithReset\stage3\MAKE.EXE
+		FlashEmbedded\LogicWithReset\stage3\MAKEFILE = FlashEmbedded\LogicWithReset\stage3\MAKEFILE
+		FlashEmbedded\LogicWithReset\stage3\SERIAL.C = FlashEmbedded\LogicWithReset\stage3\SERIAL.C
+		FlashEmbedded\LogicWithReset\stage3\STAGE3.HEX = FlashEmbedded\LogicWithReset\stage3\STAGE3.HEX
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlashC167", "FlashDotExeUpgrade\FlashC167.csproj", "{6D439031-9C50-48E7-B362-A0EAA1D57190}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlashSourcesDLL", "FlashSourcesDLL\FlashSourcesDLL.vcxproj", "{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|Win32 = Debug|Win32
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Debug|Any CPU.Build.0 = Debug|x86
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6D439031-9C50-48E7-B362-A0EAA1D57190}.Release|Win32.ActiveCfg = Release|Any CPU
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Debug|Any CPU.Build.0 = Debug|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Debug|Win32.Build.0 = Debug|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Release|Any CPU.ActiveCfg = Release|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Release|Any CPU.Build.0 = Release|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Release|Win32.ActiveCfg = Release|Win32
+		{07AEF85E-FCEC-448D-8E20-66A5483C4ACE}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{37C7B19C-1E06-49EA-BDB0-20BA0813D140} = {F2883626-1796-43D3-A28C-2DBAD215E9F5}
+		{BAE2F377-A496-41E3-A72C-7EF7964AD349} = {F2883626-1796-43D3-A28C-2DBAD215E9F5}
+		{AE6487A8-BD57-438B-BB0C-A965A59971EA} = {F2883626-1796-43D3-A28C-2DBAD215E9F5}
+	EndGlobalSection
+EndGlobal

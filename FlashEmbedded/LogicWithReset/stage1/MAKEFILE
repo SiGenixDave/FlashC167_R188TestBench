@@ -1,0 +1,147 @@
+#---------------------------------------------------------------------------
+#  Make File
+#
+#  Project : Vector Control
+#  System  :
+#
+#   Created : 02 Oct 95 : Jahnavi Lokre @ AWTS
+#   Revised : 
+#   27 May 98 : Jahnavi Lokre 
+#      Updated to use compiler version 5.1 Rev 0
+#
+#
+#---------------------------------------------------------------------------
+#
+# Any flags to be used in the compilation of all C programs should
+# be listed here.  (Separate each by a space)
+#
+#---------------------------------------------------------------------------
+
+# Application Flags
+#============================
+CFLAGS = 
+
+# C166 80c166 directory
+#======================
+C166=x:\c16651r0
+
+# C166 compiler executable path
+#==============================
+CMPL=$(C166)\bin\c166.exe
+
+# A166 assembler executable path
+#===============================
+ASSM=$(C166)\BIN\A166.exe
+
+# Macro Preprocessor executable path
+#===================================
+MAC= $(C166)\bin\m166.exe
+
+# A166 formatter
+#===============
+FORM1=$(C166)\bin\ieee166.exe 
+FORM2=$(C166)\bin\ihex166.exe 
+FORM3=$(C166)\bin\srec166.exe 
+
+# Deletes capability
+#===================
+RM=del
+
+# A166 and C166 linker executable path
+#============================
+LINK=$(C166)\bin\l166.exe
+
+
+#=====================
+# default .c.obj rules
+#=====================
+.c.obj :
+    $(CMPL) $(COPT1) $(CFLAGS) $*.c
+    $(ASSM) $*.src
+    $(RM) $*.src
+
+#=======================
+# default .asm.obj rules
+#=======================
+.a66.obj:
+    $(MAC)  $*.a66 DEFINE( MODEL, LARGE )
+    $(ASSM)  $*.src $(AOPT)
+    $(RM) $*.src
+
+
+#**********************************************************************
+#                       COMPILER OPTIONS
+#======================================================================
+# -OfOP    Remove any kind of optimization (speed over code density)
+# -O       keep all types of optimization  (code density over speed)
+# -s       Merge C source code with assembly output
+# -Ms      Compile at small model
+# -Ml      Compile at large model
+# -T0      Used to prevent any global non-initialized data to 'CNEAR' section
+#          large and medium models only
+# -I\C166\include       Include the C166 include directory
+# -g       Enable symbolic debug information
+# -t       Display module summary and write section information
+#                                                in output file
+# -I..\kernel    Include the kernel directory
+# -I..\demo      Include the demo directory
+# -x       167 options
+# -err     Error file
+#========================================================================
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+# NOTE: RTXC has not yet been designed to run in TINY  or  MEDIUM models
+# * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+#========================================================================
+#   Compiler Options
+#========================================================================
+#   C166 compiler options
+#------------------------------------------------------------------------
+COPT1 = -OfOP -s -T0 -Ml -I\C166\include -g -x -err 
+COPT2 = -OfOP -s -T0 -Ml -I\C166\include -g -x -err -N -Ral=W
+#------------------------------------------------------------------------
+# A166  assembler options  (SEGMENTED)
+#-------------------------------------
+AOPT = sg DEBUG SYMB EXTEND
+#---------------------------
+# LINK in libraries for selected libraries
+#-----------------------------------------
+LIBS=x:\c16651r0\lib\ext\c166l.lib  
+ULIBS=
+#**********************************************************************
+
+
+#
+# The following lines specify the path and name of the tools.
+#
+#
+#----------------------------------------------------------------------
+# Dependencies are given below.
+#
+#
+
+stage1.obj : stage1.a66
+
+#-----------------------------------------------------------------------
+# This is a list of all the files that must be updated to generate a new
+# executable.
+#
+
+
+OBJECTS = stage1.obj 
+          
+
+#---------------------------------------------------------------------------
+# Give the command line for the binder and builder here.  You must
+# use "control files" if the total command line is over
+# 128 characters (this is a DOS limit).
+#
+
+VERSION=version.exe
+
+stage1: stage1.obj
+     $(FORM2) stage1.obj stage1.hex
+     copy stage1.hex \flashcrc\load
+
+cleanup:
+    del *.obj
+    del *.lst
