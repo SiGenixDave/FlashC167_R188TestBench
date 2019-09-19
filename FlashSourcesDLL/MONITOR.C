@@ -117,7 +117,7 @@ __declspec (dllexport) int FlashMain(int argc, char *argv[])
 
 	printf("\n ******************************************************************************");
 	printf("\n                 Bombardier Transportation USA Inc. (c) 2014-2019              ");
-	printf("\n                    C167 Flash Programmer Version (Release 1.1)                ");
+	printf("\n                    C167 Flash Programmer Version (Release 2.0)                ");
 	printf("\n                               R188 BTE Specific                               ");
 	printf("\n ******************************************************************************");
 	printf("\n");
