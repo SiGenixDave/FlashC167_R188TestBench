@@ -40,7 +40,6 @@
 #define  MAX_SIZE_OF_ROW_IN_HEX_FILE      100
 #define  EPROM_SIZE                       0x100000
 
-
 #define  BAUD_115200                      1
 #define  BAUD__57600                      2
 #define  BAUD__38400                      3
@@ -48,7 +47,6 @@
 #define  BAUD___9600                      12
 #define  BAUD___4800                      24
 #define  BAUD___2400                      48
-
 
 #define  ECHO_TIMEOUT                     1
 #define  INVALID_ECHO                     2
@@ -64,7 +62,6 @@
 
 #define  FALSE                            0
 #define  TRUE                             1
-
 
 #define BOOT_SERIAL_PORT_TIMEOUT_SECONDS  3
 #define FLASH_SERIAL_PORT_TIMEOUT_SECONDS 3
@@ -83,77 +80,73 @@
 #define     M29W800DT_ID				  6
 #define     SST_39SF040_ID				  7
 
-
 /* STRUCTURES */
 struct file_info_t
 {
-    FILE *f_flashapp_hex;
-    FILE *f_config_crc;
-    char flashapp_hex_name[30];
-    unsigned long commandline_crc;
-    char reset;
+	FILE *f_flashapp_hex;
+	FILE *f_config_crc;
+	char flashapp_hex_name[300];
+	unsigned long commandline_crc;
+	char reset;
 };
 
 struct user_info_t
 {
-    char project[100];
-    char pcb[100];
-    char name[100];
+	char project[100];
+	char pcb[100];
+	char name[100];
 };
 
 struct echo_t
 {
-    char error_code;
-    char echo;
+	char error_code;
+	char echo;
 };
 
 struct flash_t
 {
-    int cmd_response;
-    int id;
+	int cmd_response;
+	int id;
 };
 
 /* PROTOTYPES */
-char *GetStage1 (void);
-char *GetStage2 (void);
-char *GetStage3 (void);
+char *GetStage1(void);
+char *GetStage2(void);
+char *GetStage3(void);
 
-unsigned char Parse_hex_file (char *cp, FILE *fp, FILE *out, unsigned char write_header_info);
+unsigned char Parse_hex_file(char *cp, FILE *fp, FILE *out, unsigned char write_header_info);
 
-struct echo_t Send_byte_wait_for_echo (unsigned int send_byte ,
-                                       time_t timeout);
+struct echo_t Send_byte_wait_for_echo(unsigned int send_byte,
+	time_t timeout);
 
-unsigned char ASCII_nibble_to_binary_nibble (char ascii_in);
+unsigned char ASCII_nibble_to_binary_nibble(char ascii_in);
 
-int Wait_for_command_reponse (const char *cmd,
-                              long timeout);
+int Wait_for_command_reponse(const char *cmd,
+	long timeout);
 
-unsigned int Parse_hex_record (char *ptr);
+unsigned int Parse_hex_record(char *ptr);
 
-unsigned int Get_extended_linear_address (char *ptr,
-        unsigned int *error);
+unsigned int Get_extended_linear_address(char *ptr,
+	unsigned int *error);
 
-unsigned int Get_segment_offset (char *ptr,
-                                 unsigned int *no_of_bytes,
-                                 unsigned char *byte_array,
-                                 unsigned int *error);
+unsigned int Get_segment_offset(char *ptr,
+	unsigned int *no_of_bytes,
+	unsigned char *byte_array,
+	unsigned int *error);
 
-int Flash_monitor (struct file_info_t files,
-                   char *crc_string);
+int Flash_monitor(struct file_info_t files,
+	char *crc_string);
 
-int Boot_strap_loader_monitor (void);
+int Boot_strap_loader_monitor(void);
 
-unsigned char ASCII_nibbles_to_binary_byte (char hi_nibble_ascii ,
-        char lo_nibble_ascii);
+unsigned char ASCII_nibbles_to_binary_byte(char hi_nibble_ascii,
+	char lo_nibble_ascii);
 
-unsigned char Get_crc_from_logic (unsigned char crc_width,
-                                  char *crc_string,
-                                  struct file_info_t files);
+unsigned char Get_crc_from_logic(unsigned char crc_width,
+	char *crc_string,
+	struct file_info_t files);
 
-struct flash_t Get_flash_type (long timeout_secs);
+struct flash_t Get_flash_type(long timeout_secs);
 
-void a_putc (char tx);
-int a_getc (void);
-
-
-
+void a_putc(char tx);
+int a_getc(void);

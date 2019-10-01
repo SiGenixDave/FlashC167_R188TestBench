@@ -117,7 +117,7 @@ __declspec (dllexport) int FlashMain(int argc, char *argv[])
 
 	printf("\n ******************************************************************************");
 	printf("\n                 Bombardier Transportation USA Inc. (c) 2014-2019              ");
-	printf("\n                    C167 Flash Programmer Version (Release 2.0)                ");
+	printf("\n                    C167 Flash Programmer Version (Release 2.1)                ");
 	printf("\n                               R188 BTE Specific                               ");
 	printf("\n ******************************************************************************");
 	printf("\n");
@@ -125,7 +125,7 @@ __declspec (dllexport) int FlashMain(int argc, char *argv[])
 	/* Verify valid number of command line arguments */
 	if (argc > 6 || argc < 2)
 	{
-		printf("\tUsage is: FlashC167 <comport> <IntelHexFilename> <CRC config file> <baud_code> <reset> \n");
+		printf("\tUsage is: FlashC167 <comport> <IntelHexFilename> <CRC config file> <baud_code> <reset> <results_file_name>\n");
 		return (1);
 	}
 
